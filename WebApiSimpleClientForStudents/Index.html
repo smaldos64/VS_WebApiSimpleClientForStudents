@@ -49,15 +49,20 @@
             }
 
             function UpdatePagerForSide() {
-                $(".StudentNames").AddPageComponentsDynamic(
-                    {
-                        Number_Of_Paging_Elements_On_Side: 8,
-                        MaxNumberOfPagerPagesInPagerSlider: 4,
-                        PagerClassName: "StudentNames",
-                        PagerStyleTable: true,
-                        UsePagerElementOnSideSelector: true,
-                    }
-                );
+                //try {
+                //    $(".StudentNames").AddPageComponentsDynamic(
+                //        {
+                //            Number_Of_Paging_Elements_On_Side: 8,
+                //            MaxNumberOfPagerPagesInPagerSlider: 4,
+                //            PagerClassName: "StudentNames",
+                //            PagerStyleTable: true,
+                //            UsePagerElementOnSideSelector: true,
+                //        }
+                //    );
+                //}
+                //catch (Exception) {
+                //    $(".ErrorMessages").text(Exception);
+                //}
             }
 
             function AddDataRowToTable(StudentNameID, StudentFirstAndLastName) {
@@ -67,13 +72,11 @@
                 WorkString += "<td class='StudentFirstAndLastName'>";
                 WorkString += StudentFirstAndLastName;
                 WorkString += "<td>";
-                //WorkString += "<button type='button' class='EditStudentName'>Ret Studerende Navn</button>";
                 WorkString += "<button type='button'";
                 WorkString += "value='" + StudentNameID + "' ";
                 WorkString += "class='" + EditStudentNameClassName + "'";
                 WorkString += ">Ret Studerende Navn (" + StudentNameID + ") </button>";
                 WorkString += "<td>";
-                //WorkString += "<button type='button' class='DeleteStudentName'>Slet Studerende Navn</button>";
                 WorkString += "<button type='button'";
                 WorkString += "value='" + StudentNameID + "' ";
                 WorkString += "class='" + DeleteStudentNameClassName + "'";
@@ -87,6 +90,7 @@
 
                 $.ajax({
                     url: WEB_API_URL_Student,
+                    type: 'GET',
                     context: {},
                     dataType: "json",
                     mimeType: 'text/html',
@@ -100,7 +104,7 @@
                             jSonDataDeserialized = JSON.parse(data);
                             DecodejSONStudentData(jSonDataDeserialized);
                             //HandleButtonValueAndText(CurrentUserSelection);
-                            //UpdatePagerForSide();
+                            UpdatePagerForSide();
                             //DecodejSONStudentData(data);
                         }
                         catch (Exception) {
@@ -108,12 +112,12 @@
                             try {
                                 jSonDataDeserialized = JSON.parse(JSON.stringify(data));
                                 DecodejSONStudentData(jSonDataDeserialized);
-                                //UpdatePagerForSide();
+                                UpdatePagerForSide();
                             }
                             catch (Exception) {
                                 try {
                                     DecodejSONStudentData(data);
-                                    //UpdatePagerForSide();
+                                    UpdatePagerForSide();
                                 }
                                 catch (Exception) {
                                     $(".ErrorMessages").text(Exception);
@@ -141,7 +145,6 @@
                     var data = { StudentFirstAndLastName: StudentFirstAndLastName }
                     $.ajax({
                         url: WEB_API_URL_Student,
-                        //crossDomain: true,
                         type: 'POST',
                         contentType: 'application/json',
                         data: JSON.stringify(data),
@@ -166,7 +169,6 @@
                     var data = { StudentNameID: StudentNameID, StudentFirstAndLastName: StudentFirstAndLastName }
                     $.ajax({
                         url: WEB_API_URL_Student + "?id=" + StudentNameID,
-                        //crossDomain: true,
                         type: 'PUT',
                         contentType: 'application/json',
                         data: JSON.stringify(data),
@@ -221,8 +223,6 @@
 
         $('body').on('click', '.' + EditStudentNameClassName, function () {
             StudentNameID = $(this).val();
-            //CurrentRow = $(this).closest('tr'),
-            //    CurrentRowCells = CurrentRow.children();
             CurrentRow = $(this).closest('tr');
             CurrentRowCells = CurrentRow.children();
             StudentFirstAndLastName = CurrentRowCells.eq(1).text();
